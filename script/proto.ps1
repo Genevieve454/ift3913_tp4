@@ -1,18 +1,19 @@
 param(
     [string]$gitUrl = "https://github.com/jfree/jfreechart",
-    [int]$percentage = 1
+    [int]$percentage = 5
 )
 
 Clear-Host
 Set-Location $PSScriptRoot
 
-# for file generation
-$date = Get-Date -Format "dd/MM/yyyy_hh_mm_ss"
-
-$csvOutput = "output_$date.csv"
-
 Remove-Item repo -Force -confirm:$false -Recurse > $quiet
-mkdir repo -force > $quiet
+
+# for file generation
+$date = Get-Date -Format "dd-MM-yyyy_hh_mm_ss"
+
+$csvOutput = "rapport_$date.csv"
+
+mkdir repo > $quiet
 Set-Location repo
 git clone $gitUrl
 Set-Location 'jfreechart'
@@ -41,7 +42,7 @@ For ($i=0; $i -lt $randomIdList.Length; $i++) {
   $item | Add-Member -type NoteProperty -Name "NC" -Value ((Get-ChildItem -Recurse -File | Group-Object Extension -NoElement  | Sort-Object Count -Descending | Where-Object {$_.Name -eq '.java'}).Count)
 
   # Calcul des métrics, produit le fichier classes.csv
-  java -jar .\..\..\tp1-2.jar "..\..\repo"
+  java -jar ./../../../tp1-2.jar "../../repo"
   $classesResults = Import-csv -path .\classes.csv -delimiter ','
 
   # Colonne pour le calcul mWMC
@@ -59,4 +60,6 @@ For ($i=0; $i -lt $randomIdList.Length; $i++) {
 }
 
 # Export en CSV de l'analyse
-$data | Export-Csv -Path "..\..\$csvOutput" -NoTypeInformation
+$data | Export-Csv -Path "..\..\..\$csvOutput" -NoTypeInformation
+
+Set-Location ./../..
