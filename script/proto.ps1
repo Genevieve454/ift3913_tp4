@@ -1,8 +1,9 @@
 param(
     [string]$gitUrl = "https://github.com/jfree/jfreechart",
-    [int]$percentage = 5,
-    [string]$destFolder = "repo"
+    [int]$percentage = 5
 )
+
+$destFolder = "repo"
 
 Clear-Host
 Set-Location $PSScriptRoot
